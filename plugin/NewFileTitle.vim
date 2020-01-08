@@ -88,12 +88,12 @@ endfunction
 function! Main()
 
 	if SetFileType() == 1
-		echo "NewFileTitle : support file type list is empty."
+		echo "NewFileTitle : Support file type list is empty."
 		return 1
 	endif
 
 	if s:is_support_type == 0 
-		echo "NewFileTitle : don\'t support is type."
+		echo "NewFileTitle : Don\'t support is type."
 		return 2
 	endif
 
