@@ -14,8 +14,8 @@
 
 ## Usage
 
-* Set up author : `let g:NFT_author	= "sunow"`
-* Set up Mail : `let g:NFT_Mail = "sunow@139.com"`
+* Set up author : `let g:NFT_author	= "author"`
+* Set up Mail : `let g:NFT_Mail = "mail"`
 
 
 
