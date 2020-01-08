@@ -4,20 +4,18 @@
 
 ## installation
 
-* vim-plug
+* Install with the `vim-plug` tool : 
 
   ```bash
-  Plug 'sunowsir/NewFileTitle'
+  call plug#begin('~/.vim/plugged')
+  Plug 'sunowsir/NewFileTitle'  
+  call plug#end()
   ```
 
 ## Usage
 
 * Set up author : `let g:NFT_author	= "sunow"`
 * Set up Mail : `let g:NFT_Mail = "sunow@139.com"`
-
-
-
-
 
 
 
