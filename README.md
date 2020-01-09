@@ -6,18 +6,36 @@
 
 * Install with the `vim-plug` tool : 
 
-  ```bash
+  ```vim
   call plug#begin('~/.vim/plugged')
   Plug 'sunowsir/NewFileTitle'  
   call plug#end()
   ```
 
-## Usage
+## Setup
 
 * Set up author : `let g:NFT_author	= "author"`
+
 * Set up Mail : `let g:NFT_Mail = "mail"`
 
+* Set some languages you need to support : 
 
+  eg.
+
+  ```vim
+  let g:NFT_support_type_Dic	= {
+  			\ 'c'		: ['c'],
+  			\ 'cpp'		: ['cpp', 'cxx'], 
+  			\ 'go'		: ['go'],
+  			\ 'sh'		: ['sh'], 
+  			\ 'python'	: ['py'], 
+  			\ 'lua'		: ['lua'], 
+  			\}
+  ```
+
+## Show
+
+![c](./1.png)
 
 
 
