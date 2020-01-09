@@ -20,16 +20,15 @@
 
 * Set some languages you need to support : 
 
+  > The currently supported languages are: c、c++、go、bash、python、lua、vimscript
+
   eg.
 
   ```vim
   let g:NFT_support_type_Dic	= {
   			\ 'c'		: ['c'],
   			\ 'cpp'		: ['cpp', 'cxx'], 
-  			\ 'go'		: ['go'],
-  			\ 'sh'		: ['sh'], 
   			\ 'python'	: ['py'], 
-  			\ 'lua'		: ['lua'], 
   			\}
   ```
 
