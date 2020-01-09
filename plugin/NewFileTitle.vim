@@ -1,4 +1,4 @@
-" This is sunow's vim plug for show clip string.
+" Add a title to new file for vim plugin
 
 " 防止重复载入插件
 if exists("g:loaded_NewFileTitle")
@@ -52,7 +52,7 @@ call add(s:insert_list, s:creation_string)
 
 " ===================================
 
-function! SetFileType()
+function! s:SetFileType()
 	if empty(g:NFT_support_type_Dic)
 		return 1
 	endif
@@ -69,7 +69,7 @@ function! SetFileType()
 	return 0
 endfunction
 
-function! SetTitleInfo(StartLineNum, ...) 
+function! s:SetTitleInfo(StartLineNum, ...) 
 	let l:index = a:StartLineNum - 2
 
 	if a:0 == 1 || a:0 == 2 
@@ -107,41 +107,41 @@ function! SetTitleInfo(StartLineNum, ...)
 endfunction
 
 
-function! SetFileTitle()
+function! s:SetFileTitle()
 	if &filetype == 'c' 
-		call SetTitleInfo(1, "/*", "*/")
+		call s:SetTitleInfo(1, "/*", "*/")
 		call append(line(".")+6, "#include <stdio.h>")
 		call append(line(".")+7, "")
 	elseif &filetype == 'cpp'
-		call SetTitleInfo(1, "/*", "*/")
+		call s:SetTitleInfo(1, "/*", "*/")
 		call append(line(".")+6, "#include <iostream>")
 		call append(line(".")+7, "")
 	elseif expand("%:e") == 'h'
-		call SetTitleInfo(1, "/*", "*/")
+		call s:SetTitleInfo(1, "/*", "*/")
  		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
  		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
  		call append(line(".")+8, "#endif")
 	elseif &filetype == 'go' 
-		call SetTitleInfo(1, "/*", "*/")
+		call s:SetTitleInfo(1, "/*", "*/")
 	elseif &filetype == 'python'  
         call setline(1,"#!/bin/python")
         call append(line("."),"#coding=utf-8")
-		call SetTitleInfo(3, "#")
+		call s:SetTitleInfo(3, "#")
 	elseif &filetype == 'sh'
  		call setline(1,"#!/bin/bash") 
-		call SetTitleInfo(2, "#")
+		call s:SetTitleInfo(2, "#")
 	elseif &filetype == 'lua'
  		call setline(1,"#!/bin/lua") 
  		call append(line("."), "") 
-		call SetTitleInfo(3, "--[[", "  ]]")
+		call s:SetTitleInfo(3, "--[[", "  ]]")
 	endif
 
 	return 
 endfunction
 
 
-function! Main()
-	if SetFileType() == 1
+function! s:NewFileTitleMain()
+	if s:SetFileType() == 1
 		echo "NewFileTitle : Support file type list is empty."
 		return 1
 	endif
@@ -151,15 +151,19 @@ function! Main()
 		return 2
 	endif
 
-	call SetFileTitle()
+	call s:SetFileTitle()
+	exec 'normal G'
 	
 	return 0
 endfunction
 
 " ===================================
 
-command! -nargs=0 NewFileTitle call Main()
+" command! -nargs=0 NewFileTitle call Main()
 
-autocmd BufNewFile * exec ": NewFileTitle"
-autocmd BufNewFile * normal G
+autocmd BufNewFile * call s:NewFileTitleMain()
+" autocmd BufNewFile * normal G
+
+
+
 
