@@ -17,7 +17,9 @@ if !exists("g:NFT_Mail")
 	let g:NFT_Mail				= ""
 endif
 
-let s:NFT_support_type_Dic	= {
+" support language dictionary
+if !exists("g:NFT_support_type_Dic")
+	let g:NFT_support_type_Dic	= {
 			\ 'c'		: ['c'],
 			\ 'cpp'		: ['cpp', 'cxx'], 
 			\ 'go'		: ['go'],
@@ -25,6 +27,7 @@ let s:NFT_support_type_Dic	= {
 			\ 'python'	: ['py'], 
 			\ 'lua'		: ['lua'], 
 			\}
+endif
 
 
 " ===================================
@@ -40,11 +43,11 @@ let s:creation_string		= "Creation  : ".strftime("%c")
 " ===================================
 
 function! SetFileType()
-	if empty(s:NFT_support_type_Dic)
+	if empty(g:NFT_support_type_Dic)
 		return 1
 	endif
 
-	for [key, values] in items(s:NFT_support_type_Dic)
+	for [key, values] in items(g:NFT_support_type_Dic)
 		if key == &filetype
 			let s:is_support_type = 1
 		endif
@@ -57,9 +60,9 @@ function! SetFileType()
 endfunction
 
 function! SetContainsTitleInfo(CommentFalgl, CommentFalgr, StartRowNum)
-	let l:insert_list = []
-	let l:loop_start = 0
-	let l:list_index = 1
+	let l:insert_list	= []
+	let l:loop_start	= 0
+	let l:list_index	= 1
 
 	call add(l:insert_list, a:CommentFalgl)
 	call add(l:insert_list, "	* ".s:file_string)
@@ -88,13 +91,14 @@ function! SetRowByLineTitleInfo(CommentFlag, StartRowNum)
 	let l:insert_list	= []
 	let l:row_num		= a:StartRowNum
 
-	call add(l:insert_list, a:CommentFlag." ".s:file_string)
-	call add(l:insert_list, a:CommentFlag." ".s:author_string)
-	call add(l:insert_list, a:CommentFlag." ".s:mail_string)
-	call add(l:insert_list, a:CommentFlag." ".s:creation_string)
+	call add(l:insert_list, a:CommentFlag)
+	call add(l:insert_list, a:CommentFlag."	* ".s:file_string)
+	call add(l:insert_list, a:CommentFlag."	* ".s:author_string)
+	call add(l:insert_list, a:CommentFlag."	* ".s:mail_string)
+	call add(l:insert_list, a:CommentFlag."	* ".s:creation_string)
 	call add(l:insert_list, "")
 
-	for i in range(0, 4)
+	for i in range(0, 5)
 		call append(line(".")+l:row_num, get(l:insert_list, i))
 		let l:row_num = l:row_num + 1
 	endfor
@@ -120,13 +124,11 @@ function! SetFileTitle()
 		call SetContainsTitleInfo("/*", "*/", 0)
 	elseif &filetype == 'python'  
         call setline(1,"#!/bin/python")
-        call append(line("."),"# coding=utf-8")
-		call append(line(".")+1, "") 
-		call SetRowByLineTitleInfo("#", 2)
+        call append(line("."),"#coding=utf-8")
+		call SetRowByLineTitleInfo("#", 1)
 	elseif &filetype == 'sh'
  		call setline(1,"#!/bin/bash") 
- 		call append(line("."), "") 
-		call SetRowByLineTitleInfo("#", 1)
+		call SetRowByLineTitleInfo("#", 0)
 	elseif &filetype == 'lua'
  		call setline(1,"#!/bin/lua") 
  		call append(line("."), "") 
