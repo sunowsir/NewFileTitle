@@ -39,16 +39,13 @@ endif
 " 标记是否支持该语言
 let s:is_support_type		= 0
 
-let s:file_string			= "	* File      : ".expand("%")
-let s:author_string			= "	* Author    : ".g:NFT_author
-let s:mail_string			= "	* Mail      : ".g:NFT_Mail
-let s:creation_string		= "	* Creation  : ".strftime("%c")
-
+" title information list
+" You can change the list to DIY new file title.
 let s:insert_list			= []
-call add(s:insert_list, s:file_string)
-call add(s:insert_list, s:author_string)
-call add(s:insert_list, s:mail_string)
-call add(s:insert_list, s:creation_string)
+call add(s:insert_list, "	* File      : ".expand("%"))
+call add(s:insert_list, "	* Author    : ".g:NFT_author)
+call add(s:insert_list, "	* Mail      : ".g:NFT_Mail)
+call add(s:insert_list, "	* Creation  : ".strftime("%c"))
 
 
 " ===================================
