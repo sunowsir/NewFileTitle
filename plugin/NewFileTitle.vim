@@ -8,7 +8,7 @@ endif
 " ===================================
 
 " start flag
-let g:loaded_NewFileTitle		= 1
+let g:loaded_NewFileTitle	= 1
 
 " author string
 if !exists("g:NFT_author") 
@@ -18,19 +18,6 @@ endif
 " mail string
 if !exists("g:NFT_Mail")
 	let g:NFT_Mail				= ""
-endif
-
-if !exists("g:file_title")
-	let g:file_title			= "	* File      : "
-endif
-if !exists("g:author_title")
-	let g:author_title			= "	* Author    : "
-endif
-if !exists("g:mail_title")
-	let g:mail_title			= "	* Mail      : "
-endif
-if !exists("g:creation_title")
-	let g:creation_title		= "	* Creation  : "
 endif
 
 " support language dictionary
@@ -51,11 +38,16 @@ endif
 " 标记是否支持该语言
 let s:is_support_type		= 0
 
+let s:file_string			= "	* File      : ".expand("%")
+let s:author_string			= "	* Author    : ".g:NFT_author
+let s:mail_string			= "	* Mail      : ".g:NFT_Mail
+let s:creation_string		= "	* Creation  : ".strftime("%c")
+
 let s:insert_list			= []
-call add(s:insert_list, g:file_title.expand("%"))
-call add(s:insert_list, g:author_title.g:NFT_author)
-call add(s:insert_list, g:mail_title.g:NFT_Mail)
-call add(s:insert_list, g:creation_title.strftime("%c"))
+call add(s:insert_list, s:file_string)
+call add(s:insert_list, s:author_string)
+call add(s:insert_list, s:mail_string)
+call add(s:insert_list, s:creation_string)
 
 
 " ===================================
