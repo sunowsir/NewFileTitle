@@ -10,8 +10,8 @@ endif
 " start flag
 let g:loaded_NewFileTitle	= 1
 
-let g:NFT_author			= "sunowsir"
-let g:NFT_Mail				= "sunowsir@163.com"
+let g:NFT_author			= ""
+let g:NFT_Mail				= ""
 
 let s:NFT_support_type_Dic	= {
 			\ 'c'		: ['c'],
