@@ -8,13 +8,29 @@ endif
 " ===================================
 
 " start flag
-let g:loaded_NewFileTitle	= 1
+let g:loaded_NewFileTitle		= 1
 
+" author string
 if !exists("g:NFT_author") 
 	let g:NFT_author			= ""
 endif
+
+" mail string
 if !exists("g:NFT_Mail")
 	let g:NFT_Mail				= ""
+endif
+
+if !exists("g:file_title")
+	let g:file_title			= "	* File      : "
+endif
+if !exists("g:author_title")
+	let g:author_title			= "	* Author    : "
+endif
+if !exists("g:mail_title")
+	let g:mail_title			= "	* Mail      : "
+endif
+if !exists("g:creation_title")
+	let g:creation_title		= "	* Creation  : "
 endif
 
 " support language dictionary
@@ -35,10 +51,12 @@ endif
 " 标记是否支持该语言
 let s:is_support_type		= 0
 
-let s:file_string			= "File      : ".expand("%")
-let s:author_string			= "Author    : ".g:NFT_author
-let s:mail_string			= "Mail      : ".g:NFT_Mail
-let s:creation_string		= "Creation  : ".strftime("%c")
+let s:insert_list			= []
+call add(s:insert_list, g:file_title.expand("%"))
+call add(s:insert_list, g:author_title.g:NFT_author)
+call add(s:insert_list, g:mail_title.g:NFT_Mail)
+call add(s:insert_list, g:creation_title.strftime("%c"))
+
 
 " ===================================
 
@@ -59,80 +77,71 @@ function! SetFileType()
 	return 0
 endfunction
 
-function! SetContainsTitleInfo(CommentFalgl, CommentFalgr, StartRowNum)
-	let l:insert_list	= []
-	let l:loop_start	= 0
-	let l:list_index	= 1
+function! SetTitleInfo(StartLineNum, ...) 
+	let l:index = a:StartLineNum - 2
 
-	call add(l:insert_list, a:CommentFalgl)
-	call add(l:insert_list, "	* ".s:file_string)
-	call add(l:insert_list, "	* ".s:author_string)
-	call add(l:insert_list, "	* ".s:mail_string)
-	call add(l:insert_list, "	* ".s:creation_string)
-	call add(l:insert_list, a:CommentFalgr)
-	call add(l:insert_list, "")
-
-	if a:StartRowNum == 0
-		call setline(1, get(l:insert_list, 0)) 
+	if a:0 == 1 || a:0 == 2 
+		let l:Comment_Symbol_1 = a:1
+		if a:0 == 2
+			let l:Comment_Symbol_2 = a:2
+		endif
 	else 
-		call append(line(".")+a:StartRowNum, get(l:insert_list, 0))
-		let l:loop_start = a:StartRowNum + 1
+		echo "NewFileTitle.vim : SetTitleInfo args number error."
+		return 1
 	endif
+	
+	if l:index == -1 
+		call setline(1, l:Comment_Symbol_1)
+	else 
+		call append(line(".") + l:index, l:Comment_Symbol_1)
+	endif
+	let l:index += 1
 
-	for i in range(l:loop_start, l:loop_start + 5)
-		call append(line(".")+i, get(l:insert_list, l:list_index))
-		let l:list_index = l:list_index + 1
+	for i in s:insert_list
+		if a:0 == 1
+			call append(line(".") + l:index, l:Comment_Symbol_1.i)
+		else 
+			call append(line(".") + l:index, i)
+		endif
+		let l:index += 1
 	endfor
+
+	if a:0 == 2
+		call append(line(".") + l:index, l:Comment_Symbol_2)
+	endif
+	call append(line(".") + l:index + 1, "")
 
 	return 
 endfunction
 
-function! SetRowByLineTitleInfo(CommentFlag, StartRowNum) 
-	let l:insert_list	= []
-	let l:row_num		= a:StartRowNum
-
-	call add(l:insert_list, a:CommentFlag)
-	call add(l:insert_list, a:CommentFlag."	* ".s:file_string)
-	call add(l:insert_list, a:CommentFlag."	* ".s:author_string)
-	call add(l:insert_list, a:CommentFlag."	* ".s:mail_string)
-	call add(l:insert_list, a:CommentFlag."	* ".s:creation_string)
-	call add(l:insert_list, "")
-
-	for i in range(0, 5)
-		call append(line(".")+l:row_num, get(l:insert_list, i))
-		let l:row_num = l:row_num + 1
-	endfor
-
-	return 
-endfunction 
 
 function! SetFileTitle()
 	if &filetype == 'c' 
-		call SetContainsTitleInfo("/*", "*/", 0)
+		call SetTitleInfo(1, "/*", "*/")
 		call append(line(".")+6, "#include <stdio.h>")
 		call append(line(".")+7, "")
 	elseif &filetype == 'cpp'
-		call SetContainsTitleInfo("/*", "*/", 0)
+		call SetTitleInfo(1, "/*", "*/")
 		call append(line(".")+6, "#include <iostream>")
 		call append(line(".")+7, "")
 	elseif expand("%:e") == 'h'
-		call SetContainsTitleInfo("/*", "*/", 0)
+		call SetTitleInfo(1, "/*", "*/")
  		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
  		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
  		call append(line(".")+8, "#endif")
 	elseif &filetype == 'go' 
-		call SetContainsTitleInfo("/*", "*/", 0)
+		call SetTitleInfo(1, "/*", "*/")
 	elseif &filetype == 'python'  
         call setline(1,"#!/bin/python")
         call append(line("."),"#coding=utf-8")
-		call SetRowByLineTitleInfo("#", 1)
+		call SetTitleInfo(3, "#")
 	elseif &filetype == 'sh'
  		call setline(1,"#!/bin/bash") 
-		call SetRowByLineTitleInfo("#", 0)
+		call SetTitleInfo(2, "#")
 	elseif &filetype == 'lua'
  		call setline(1,"#!/bin/lua") 
  		call append(line("."), "") 
-		call SetContainsTitleInfo("--[[", "  ]]", 1)
+		call SetTitleInfo(3, "--[[", "  ]]")
 	endif
 
 	return 
