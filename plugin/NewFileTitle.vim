@@ -29,6 +29,7 @@ if !exists("g:NFT_support_type_Dic")
 			\ 'sh'		: ['sh'], 
 			\ 'python'	: ['py'], 
 			\ 'lua'		: ['lua'], 
+			\ 'vim'		: ['vim'], 
 			\}
 endif
 
@@ -78,22 +79,24 @@ function! s:SetTitleInfo(StartLineNum, ...)
 			let l:Comment_Symbol_2 = a:2
 		endif
 	else 
-		echo "NewFileTitle.vim : SetTitleInfo args number error."
 		return 1
 	endif
-	
-	if l:index == -1 
-		call setline(1, l:Comment_Symbol_1)
-	else 
-		call append(line(".") + l:index, l:Comment_Symbol_1)
+
+	if a:0 == 2 
+		if l:index == -1 
+			call setline(1, l:Comment_Symbol_1) 
+		else 
+			call append(line(".") + l:index, l:Comment_Symbol_1)
+		endif
+		let l:index += 1
 	endif
-	let l:index += 1
 
 	for i in s:insert_list
-		if a:0 == 1
-			call append(line(".") + l:index, l:Comment_Symbol_1.i)
+		let l:add_str = a:0 == 1 ? l:Comment_Symbol_1.i : i
+		if l:index == -1 
+			call setline(1, l:add_str) 
 		else 
-			call append(line(".") + l:index, i)
+			call append(line(".") + l:index, l:add_str)
 		endif
 		let l:index += 1
 	endfor
@@ -126,14 +129,18 @@ function! s:SetFileTitle()
 	elseif &filetype == 'python'  
         call setline(1,"#!/bin/python")
         call append(line("."),"#coding=utf-8")
-		call s:SetTitleInfo(3, "#")
+ 		call append(line(".") + 1, "#") 
+		call s:SetTitleInfo(4, "#")
 	elseif &filetype == 'sh'
  		call setline(1,"#!/bin/bash") 
-		call s:SetTitleInfo(2, "#")
+ 		call append(line("."), "#") 
+		call s:SetTitleInfo(3, "#")
 	elseif &filetype == 'lua'
  		call setline(1,"#!/bin/lua") 
  		call append(line("."), "") 
 		call s:SetTitleInfo(3, "--[[", "  ]]")
+	elseif &filetype == 'vim'
+		call s:SetTitleInfo(1, "\"")
 	endif
 
 	return 
