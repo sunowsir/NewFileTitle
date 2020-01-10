@@ -23,13 +23,17 @@ endif
 " support language dictionary
 if !exists("g:NFT_support_type_Dic")
 	let g:NFT_support_type_Dic	= {
-			\ 'c'		: ['c'],
-			\ 'cpp'		: ['cpp', 'cxx'], 
-			\ 'go'		: ['go'],
-			\ 'sh'		: ['sh'], 
-			\ 'python'	: ['py'], 
-			\ 'lua'		: ['lua'], 
-			\ 'vim'		: ['vim'], 
+			\ 'c'			: ['c'],
+			\ 'cpp'			: ['cpp', 'cxx'], 
+			\ 'go'			: ['go'],
+			\ 'sh'			: ['sh'], 
+			\ 'python'		: ['py'], 
+			\ 'lua'			: ['lua'], 
+			\ 'vim'			: ['vim'], 
+			\ 'html'		: ['html'], 
+			\ 'javascript'	: ['js'], 
+			\ 'css'			: ['css'], 
+			\ 'php'			: ['php'], 
 			\}
 endif
 
@@ -138,6 +142,16 @@ function! s:SetFileTitle()
 		call s:SetTitleInfo(3, "--[[", "  ]]")
 	elseif &filetype == 'vim'
 		call s:SetTitleInfo(1, "\"")
+	elseif &filetype == 'html' 
+ 		call setline(1,"<!doctype html>") 
+ 		call append(line("."), "<html lang=\"zh-N\">") 
+		call s:SetTitleInfo(3, "<!--", "-->")
+	elseif &filetype == 'javascript' 
+		call s:SetTitleInfo(1, "/*", "*/")
+	elseif &filetype == 'css' 
+		call s:SetTitleInfo(1, "/*", "*/")
+	elseif &filetype == 'php' 
+		call s:SetTitleInfo(1, "/*", "*/")
 	endif
 
 	return 
@@ -167,7 +181,6 @@ endfunction
 
 autocmd BufNewFile * call s:NewFileTitleMain()
 " autocmd BufNewFile * normal G
-
 
 
 
