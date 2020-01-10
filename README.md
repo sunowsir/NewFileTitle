@@ -14,13 +14,33 @@
 
 ## Setup
 
-* Set up author : `let g:NFT_author	= "author"`
+* Setup author : `let g:NFT_author = "author"`
 
-* Set up Mail : `let g:NFT_Mail = "mail"`
+* Setup Mail : `let g:NFT_Mail = "mail"`
+
+* Add python's coding: `let g:NFT_python_coding = "utf-8"`
+
+* Add some languages interpreter :
+
+  >   Only setting shell、python and lua are supported.
+
+  *   eg. 
+
+      ```vim
+      let g:NFT_shell_interpreter		= "/bin/bash"
+      let g:NFT_python_interpreter	= "/bin/python"
+      let g:NFT_lua_interpreter		= "/bin/lua"
+      ```
+
+      
+
+  
+
+  
 
 * Set some languages you need to support : 
 
-  > The currently supported languages are:  c、c++、go、bash、python、lua、vimscript、html、css、javascript、php
+  > The currently supported languages are:  c、c++、go、shell、python、lua、vimscript、html、css、javascript、php
 
   * let g:NFT_support_type_Dic   =   ['language file type' :  ['suffix'],  ]
 
@@ -31,8 +51,16 @@
     			\ 'c'		: ['c'],
     			\ 'cpp'		: ['cpp', 'cxx'], 
     			\ 'python'	: ['py'], 
-    			\}
+    			\} 
     ```
+
+  
+
+  
+
+  
+
+  
 
 ## Show
 

@@ -8,21 +8,41 @@ endif
 " ===================================
 
 " start flag
-let g:loaded_NewFileTitle	= 1
+let g:loaded_NewFileTitle			= 1
 
 " author string
 if !exists("g:NFT_author") 
-	let g:NFT_author			= ""
+	let g:NFT_author				= ""
 endif
 
 " mail string
 if !exists("g:NFT_Mail")
-	let g:NFT_Mail				= ""
+	let g:NFT_Mail					= ""
+endif
+
+" shell interpreter 
+if !exists("g:NFT_shell_interpreter")
+	let g:NFT_shell_interpreter	= "/bin/bash"
+endif
+
+" python interpreter
+if !exists("g:NFT_python_interpreter")
+	let g:NFT_python_interpreter	= "/bin/python"
+endif
+
+" python coding
+if !exists("g:NFT_python_coding")
+	let g:NFT_python_coding			= "utf-8"
+endif
+
+" lua interpreter
+if !exists("g:NFT_lua_interpreter")
+	let g:NFT_lua_interpreter	= "/bin/lua"
 endif
 
 " support language dictionary
 if !exists("g:NFT_support_type_Dic")
-	let g:NFT_support_type_Dic	= {
+	let g:NFT_support_type_Dic		= {
 			\ 'c'			: ['c'],
 			\ 'cpp'			: ['cpp', 'cxx'], 
 			\ 'go'			: ['go'],
@@ -128,16 +148,16 @@ function! s:SetFileTitle()
 	elseif &filetype == 'go' 
 		call s:SetTitleInfo(1, "/*", "*/")
 	elseif &filetype == 'python'  
-        call setline(1,"#!/bin/python")
-        call append(line("."),"#coding=utf-8")
+        call setline(1,"#!".g:NFT_python_interpreter)
+        call append(line("."),"#coding=".g:NFT_python_coding)
  		call append(line(".") + 1, "#") 
 		call s:SetTitleInfo(4, "#")
 	elseif &filetype == 'sh'
- 		call setline(1,"#!/bin/bash") 
+ 		call setline(1,"#!".g:NFT_shell_interpreter) 
  		call append(line("."), "#") 
 		call s:SetTitleInfo(3, "#")
 	elseif &filetype == 'lua'
- 		call setline(1,"#!/bin/lua") 
+ 		call setline(1,"#!".g:NFT_lua_interpreter) 
  		call append(line("."), "") 
 		call s:SetTitleInfo(3, "--[[", "  ]]")
 	elseif &filetype == 'vim'
@@ -177,10 +197,8 @@ endfunction
 
 " ===================================
 
-" command! -nargs=0 NewFileTitle call Main()
 
 autocmd BufNewFile * call s:NewFileTitleMain()
-" autocmd BufNewFile * normal G
 
 
 
