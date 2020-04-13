@@ -1,60 +1,53 @@
 " Add a title to new file for vim plugin
 
+" ===================================
+
 " 防止重复载入插件
 if exists("g:loaded_NewFileTitle")
 	finish
+else 
+    " start flag
+    let g:loaded_NewFileTitle			= 1
 endif
 
-" ===================================
 
-" start flag
-let g:loaded_NewFileTitle			= 1
-
-" author string
-if !exists("g:NFT_author") 
-	let g:NFT_author				= ""
+" default code.
+if !exists("g:NFT_default_code") 
+	let g:NFT_default_code = {
+		\ 'c'		: ['#include <stdio.h>', ''], 
+		\ 'cpp'		: ['#include <iostream>', ''], 
+		\ 'h'		: [ 
+						\ "#ifndef _" . toupper(expand("%:r")) . "_H", 
+						\ "#define _" . toupper(expand("%:r")) . "_H", 
+						\ "#endif", 
+						\ ], 
+		\ 'sh'		: ['#!/bin/bash', '#'], 
+		\ 'python'	: ['#!/bin/python', '#coding=utf-8', '#'], 
+		\ 'lua'		: ['#!/bin/lua', ''], 
+		\}
 endif
 
-" mail string
-if !exists("g:NFT_Mail")
-	let g:NFT_Mail					= ""
-endif
-
-" shell interpreter 
-if !exists("g:NFT_shell_interpreter")
-	let g:NFT_shell_interpreter	= "/bin/bash"
-endif
-
-" python interpreter
-if !exists("g:NFT_python_interpreter")
-	let g:NFT_python_interpreter	= "/bin/python"
-endif
-
-" python coding
-if !exists("g:NFT_python_coding")
-	let g:NFT_python_coding			= "utf-8"
-endif
-
-" lua interpreter
-if !exists("g:NFT_lua_interpreter")
-	let g:NFT_lua_interpreter	= "/bin/lua"
+" show informaion list
+if !exists("g:NFT_normal_info") 
+	let g:NFT_normal_info = [
+		\ "\t* File     : " . expand("%s"), 
+		\ "\t* Author   : *", 
+		\ "\t* Mail     : *", 
+		\ "\t* Creation : " . strftime("%c"), 
+		\ ]
 endif
 
 " support language dictionary
-if !exists("g:NFT_support_type_Dic")
-	let g:NFT_support_type_Dic		= {
-			\ 'c'			: ['c'],
-			\ 'cpp'			: ['cpp', 'cxx'], 
-			\ 'go'			: ['go'],
-			\ 'sh'			: ['sh'], 
-			\ 'python'		: ['py'], 
-			\ 'lua'			: ['lua'], 
-			\ 'vim'			: ['vim'], 
-			\ 'html'		: ['html'], 
-			\ 'javascript'	: ['js'], 
-			\ 'css'			: ['css'], 
-			\ 'php'			: ['php'], 
-			\}
+if !exists("g:NFT_support_type")
+	let g:NFT_support_type = {
+		\ 'c'			: ['c'],
+		\ 'cpp'			: ['cpp', 'cxx'], 
+		\ 'go'			: ['go'],
+		\ 'sh'			: ['sh'], 
+		\ 'python'		: ['py'], 
+		\ 'lua'			: ['lua'], 
+		\ 'vim'			: ['vim'], 
+		\}
 endif
 
 
@@ -64,22 +57,18 @@ endif
 let s:is_support_type		= 0
 
 " title information list
-" You can change the list to DIY new file title.
-let s:insert_list			= []
-call add(s:insert_list, "	* File      : ".expand("%"))
-call add(s:insert_list, "	* Author    : ".g:NFT_author)
-call add(s:insert_list, "	* Mail      : ".g:NFT_Mail)
-call add(s:insert_list, "	* Creation  : ".strftime("%c"))
+let s:insert_list = g:NFT_normal_info
+let s:default_list = g:NFT_default_code
 
 
 " ===================================
 
 function! s:SetFileType()
-	if empty(g:NFT_support_type_Dic)
+	if empty(g:NFT_support_type)
 		return 1
 	endif
 
-	for [key, values] in items(g:NFT_support_type_Dic)
+	for [key, values] in items(g:NFT_support_type)
 		if key == &filetype
 			let s:is_support_type = 1
 		endif
@@ -130,48 +119,48 @@ function! s:SetTitleInfo(StartLineNum, ...)
 	return 
 endfunction
 
+function! s:Add_default_code(filetype, start_index)
+	if !has_key(s:default_list, a:filetype)
+		return 
+	endif
+
+	let l:index = a:start_index
+	for def_code in s:default_list[a:filetype]
+		if l:index == -1
+			call setline(1, def_code)
+		else 
+			call append(line(".") + l:index, def_code)
+		endif
+		let l:index += 1
+	endfor
+endfunction
+
 
 function! s:SetFileTitle()
-	if &filetype == 'c' 
+	if expand("%:e") == 'h'
 		call s:SetTitleInfo(1, "/*", "*/")
-		call append(line(".")+6, "#include <stdio.h>")
-		call append(line(".")+7, "")
+		call s:Add_default_code(expand("%:e"), 6)
+	elseif &filetype == 'c' 
+		call s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, 6)
 	elseif &filetype == 'cpp'
 		call s:SetTitleInfo(1, "/*", "*/")
-		call append(line(".")+6, "#include <iostream>")
-		call append(line(".")+7, "")
-	elseif expand("%:e") == 'h'
-		call s:SetTitleInfo(1, "/*", "*/")
- 		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
- 		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
- 		call append(line(".")+8, "#endif")
+		call s:Add_default_code(&filetype, 6)
 	elseif &filetype == 'go' 
 		call s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, 6)
 	elseif &filetype == 'python'  
-        call setline(1,"#!".g:NFT_python_interpreter)
-        call append(line("."),"#coding=".g:NFT_python_coding)
- 		call append(line(".") + 1, "#") 
+		call s:Add_default_code(&filetype, -1)
 		call s:SetTitleInfo(4, "#")
 	elseif &filetype == 'sh'
- 		call setline(1,"#!".g:NFT_shell_interpreter) 
- 		call append(line("."), "#") 
+		call s:Add_default_code(&filetype, -1)
 		call s:SetTitleInfo(3, "#")
 	elseif &filetype == 'lua'
- 		call setline(1,"#!".g:NFT_lua_interpreter) 
- 		call append(line("."), "") 
+		call s:Add_default_code(&filetype, -1)
 		call s:SetTitleInfo(3, "--[[", "  ]]")
 	elseif &filetype == 'vim'
 		call s:SetTitleInfo(1, "\"")
-	elseif &filetype == 'html' 
- 		call setline(1,"<!doctype html>") 
- 		call append(line("."), "<html lang=\"zh-N\">") 
-		call s:SetTitleInfo(3, "<!--", "-->")
-	elseif &filetype == 'javascript' 
-		call s:SetTitleInfo(1, "/*", "*/")
-	elseif &filetype == 'css' 
-		call s:SetTitleInfo(1, "/*", "*/")
-	elseif &filetype == 'php' 
-		call s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, 6)
 	endif
 
 	return 

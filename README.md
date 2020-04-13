@@ -14,33 +14,31 @@
 
 ## Setup
 
-* Setup author : `let g:NFT_author = "author"`
+* Setup author : `let g:NFT_author = "author"`, the default is an empty string.
 
-* Setup Mail : `let g:NFT_Mail = "mail"`
+* Setup Mail : `let g:NFT_Mail = "mail"`, the default is an empty string.
 
-* Add python's coding: `let g:NFT_python_coding = "utf-8"`
+* Add python's coding: `let g:NFT_python_coding = "utf-8"`, the default is "utf-8" .
 
 * Add some languages interpreter :
 
   >   Only setting shell、python and lua are supported.
+  >
+  >   The following is the default.
 
-  *   eg. 
+  * eg. 
 
-      ```vim
-      let g:NFT_shell_interpreter		= "/bin/bash"
-      let g:NFT_python_interpreter	= "/bin/python"
-      let g:NFT_lua_interpreter		= "/bin/lua"
-      ```
-
-      
-
-  
-
-  
+    ```vim
+    let g:NFT_shell_interpreter		= "/bin/bash"
+    let g:NFT_python_interpreter	= "/bin/python"
+    let g:NFT_lua_interpreter		= "/bin/lua"
+    ```
 
 * Set some languages you need to support : 
 
-  > The currently supported languages are:  c、c++、go、shell、python、lua、vimscript、html、css、javascript、php
+  > The currently supported languages are:  c、c++、go、shell、python、lua、vimscript、html、css、javascript、php.
+  >
+  > All default supported languages are supported of defualt.
 
   * let g:NFT_support_type_Dic   =   ['language file type' :  ['suffix'],  ]
 
@@ -54,19 +52,12 @@
     			\} 
     ```
 
-  
-
-  
-
-  
-
-  
 
 ## Show
 
+* Show only '.c' type new  file title.
+
 ![c](./1.png)
-
-
 
 ---
 
