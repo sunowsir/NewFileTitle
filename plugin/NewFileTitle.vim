@@ -116,7 +116,7 @@ function! s:SetTitleInfo(StartLineNum, ...)
 	endif
 	call append(line(".") + l:index + 1, "")
 
-	return 
+	return l:index + 2
 endfunction
 
 function! s:Add_default_code(filetype, start_index)
@@ -138,17 +138,17 @@ endfunction
 
 function! s:SetFileTitle()
 	if expand("%:e") == 'h'
-		call s:SetTitleInfo(1, "/*", "*/")
-		call s:Add_default_code(expand("%:e"), 6)
+		let line = s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(expand("%:e"), line)
 	elseif &filetype == 'c' 
-		call s:SetTitleInfo(1, "/*", "*/")
-		call s:Add_default_code(&filetype, 6)
+		let line = s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, line)
 	elseif &filetype == 'cpp'
-		call s:SetTitleInfo(1, "/*", "*/")
-		call s:Add_default_code(&filetype, 6)
+		let line = s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, line)
 	elseif &filetype == 'go' 
-		call s:SetTitleInfo(1, "/*", "*/")
-		call s:Add_default_code(&filetype, 6)
+		let line = s:SetTitleInfo(1, "/*", "*/")
+		call s:Add_default_code(&filetype, line)
 	elseif &filetype == 'python'  
 		call s:Add_default_code(&filetype, -1)
 		call s:SetTitleInfo(4, "#")
@@ -159,8 +159,8 @@ function! s:SetFileTitle()
 		call s:Add_default_code(&filetype, -1)
 		call s:SetTitleInfo(3, "--[[", "  ]]")
 	elseif &filetype == 'vim'
-		call s:SetTitleInfo(1, "\"")
-		call s:Add_default_code(&filetype, 6)
+		let line = s:SetTitleInfo(1, "\"")
+		call s:Add_default_code(&filetype, line)
 	endif
 
 	return 
