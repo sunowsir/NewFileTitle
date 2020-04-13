@@ -29,6 +29,8 @@
     			\ 'c'		: ['c'],
     			\ 'cpp'		: ['cpp', 'cxx'], 
     			\ 'python'	: ['py'], 
+				\ 'sh'		: ['sh'], 
+				\ 'lua'		: ['lua'], 
     			\} 
     ```
 * Set common code 
