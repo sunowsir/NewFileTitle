@@ -58,17 +58,22 @@ let s:is_support_type		= 0
 
 " title information list
 let s:insert_list = g:NFT_normal_info
+
+" 默认代码列表
 let s:default_list = g:NFT_default_code
+
+" 文件后缀支持列表
+let s:support_list = g:NFT_support_type
 
 
 " ===================================
 
 function! s:SetFileType()
-	if empty(g:NFT_support_type)
+	if empty(s:support_list)
 		return 1
 	endif
 
-	for [key, values] in items(g:NFT_support_type)
+	for [key, values] in items(s:support_list)
 		if key == &filetype
 			let s:is_support_type = 1
 		endif
@@ -162,7 +167,7 @@ function! s:SetFileTitle()
 		let line = s:SetTitleInfo(1, "\"")
 		call s:Add_default_code(&filetype, line)
 	endif
-
+	
 	return 
 endfunction
 
