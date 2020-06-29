@@ -68,6 +68,8 @@ let s:support_list = g:NFT_support_type
 
 " ===================================
 
+
+"让vim识别新文件后缀。
 function! s:SetFileType()
 	if empty(s:support_list)
 		return 1
@@ -85,6 +87,8 @@ function! s:SetFileType()
 	return 0
 endfunction
 
+
+" 从第StartLineNum行开始使用指定注释符号插入标题信息。
 function! s:SetTitleInfo(StartLineNum, ...) 
 	let l:index = a:StartLineNum - 2
 
@@ -124,6 +128,8 @@ function! s:SetTitleInfo(StartLineNum, ...)
 	return l:index + 2
 endfunction
 
+
+" 为filetype类型文件从start_index行开始插入默认代码。
 function! s:Add_default_code(filetype, start_index)
 	if !has_key(s:default_list, a:filetype)
 		return 
@@ -141,6 +147,7 @@ function! s:Add_default_code(filetype, start_index)
 endfunction
 
 
+" Set new file title according to different types of files.
 function! s:SetFileTitle()
 	if expand("%:e") == 'h'
 		let line = s:SetTitleInfo(1, "/*", "*/")
@@ -166,32 +173,30 @@ function! s:SetFileTitle()
 	elseif &filetype == 'vim'
 		let line = s:SetTitleInfo(1, "\"")
 		call s:Add_default_code(&filetype, line)
+	elseif &filetype == 'html'
+		call s:Add_default_code(&filetype, -1)
+		call s:SetTitleInfo(3, "<!--", "-->")
 	endif
 	
 	return 
 endfunction
 
 
+" Main function.
 function! s:NewFileTitleMain()
-	if s:SetFileType() == 1
-		echo "NewFileTitle : Support file type list is empty."
-		return 1
-	endif
-
-	if s:is_support_type == 0 
-		echo "NewFileTitle : Don\'t support file type."
-		return 2
-	endif
-
 	call s:SetFileTitle()
+
+	" 插入标题信息和默认代码之后，跳转到最后一行。
 	exec 'normal G'
 	
 	return 0
 endfunction
 
+
 " ===================================
 
 
+"当打开新文件的时候，调用NewFileTitleMain()主函数。
 autocmd BufNewFile * call s:NewFileTitleMain()
 
 
